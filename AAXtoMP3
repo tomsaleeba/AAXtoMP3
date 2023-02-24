@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # ========================================================================
 # Command Line Options
 
@@ -909,7 +908,7 @@ do
           if [ "$((${loglevel} > 1))" == "1" ]; then
             log "Splitting chapter ${chapternum}/${chaptercount} start:${chapter_start%?}(s) end:${chapter_end}(s)"
           fi
-          </dev/null "$FFMPEG" -loglevel quiet \
+          </dev/null "$FFMPEG" -loglevel error \
             -nostats \
             ${split_input} \
             -i "${output_file}" \
@@ -943,7 +942,6 @@ do
     done 9< "$metadata_file"
 
     # Clean up of working directory stuff.
-    rm "${output_file}"
     if [ "$((${loglevel} > 1))" == "1" ]; then
       log "Done creating chapters for ${output_directory}."
     else
@@ -977,7 +975,7 @@ do
       # Create temporary output file name - ensure extention matches previous appropriate output file to keep ffmpeg happy
       cover_output_file="${output_file%.*}.cover.${output_file##*.}"
       # Copy audio stream from current output, and video stream from cover file, setting appropriate metadata
-      </dev/null "$FFMPEG" -loglevel quiet \
+      </dev/null "$FFMPEG" -loglevel error \
         -nostats \
         -i "${output_file}" \
         -i "${cover_file}" \
@@ -993,6 +991,7 @@ do
         mv "${cover_output_file}" "${output_file}"
     fi
   fi
+  rm "${output_file}"
 
   # -----
   # Announce that we have completed the transcode

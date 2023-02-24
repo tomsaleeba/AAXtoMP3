@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
+debugParam=
+if [ "${DEBUG:-0}" = "1" ]; then
+  set -x
+  debugParam="--debug"
+fi
 
 completedDir=./completed
 cryptoKey=${AUDIBLE_ACTIVATION_BYTES:?must be set, e.g. a5c68103}
@@ -16,7 +21,12 @@ ls -l
 
 for curr in *.aax; do
   echo "Processing $curr"
-  time /app/AAXtoMP3 --complete_dir "$completedDir" -A "$cryptoKey" "$curr"
+  time /app/AAXtoMP3 \
+    ${debugParam} \
+    --complete_dir "$completedDir" \
+    -A "$cryptoKey" \
+    "$curr" \
+    $*
   echo "Finished $curr"
 done
 
