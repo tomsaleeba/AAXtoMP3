@@ -1,4 +1,4 @@
-FROM ubuntu:22.10
+FROM debian:bookworm
 
 RUN \
   apt update && \
